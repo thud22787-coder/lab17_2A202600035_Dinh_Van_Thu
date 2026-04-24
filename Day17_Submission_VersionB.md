@@ -1,7 +1,7 @@
 # Day 17 Submission — Cá nhân (Phiên bản B — BTVN)
 
-**Student:** [Tên học viên]
-**Date:** [Ngày]
+**Student:** Đinh Văn Thư - 2A202600035
+**Date:** 24/4/2026
 **Product idea:** Chatbot AI đọc và giải thích hợp đồng lao động từ công ty nước ngoài cho fresher và mid-level tech worker tại Việt Nam — trước khi họ ký.
 
 ---
@@ -21,16 +21,17 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
 ## 1. MVP Boundary Sheet
 
 **Riskiest Assumption:**
+
 > Fresher và mid-level tech worker sẵn sàng trả tiền (99k–149k/lần) để có một công cụ review hợp đồng chuyên biệt — thay vì tự dùng ChatGPT miễn phí hoặc hỏi bạn bè.
 
 **In-Scope** (2 tính năng — sau khi cắt từ 3):
 
-- [x] **Upload và phân tích hợp đồng** — người dùng upload file PDF/Word, AI đọc và trả về danh sách điều khoản rủi ro được highlight kèm giải thích bằng tiếng Việt thường ngày — test giả định: *người dùng cần công cụ đọc HĐ cụ thể của mình, không phải tra cứu điều luật chung chung*
-- [x] **Flag điều khoản bất thường theo luật lao động Việt Nam** — AI đánh dấu các điều khoản có dấu hiệu vi phạm BLLĐ 2019 hoặc bất lợi đáng kể (IP quá rộng, non-compete không giới hạn địa lý, thử việc vượt 60 ngày), kèm giải thích ngắn "điều này có nghĩa là gì với bạn trong thực tế" — test giả định: *người dùng cần biết điều khoản nào cụ thể là vấn đề và tại sao, không chỉ cảm giác "có gì đó lạ"*
+- [x] **Upload và phân tích hợp đồng** — người dùng upload file PDF/Word, AI đọc và trả về danh sách điều khoản rủi ro được highlight kèm giải thích bằng tiếng Việt thường ngày — test giả định: _người dùng cần công cụ đọc HĐ cụ thể của mình, không phải tra cứu điều luật chung chung_
+- [x] **Flag điều khoản bất thường theo luật lao động Việt Nam** — AI đánh dấu các điều khoản có dấu hiệu vi phạm BLLĐ 2019 hoặc bất lợi đáng kể (IP quá rộng, non-compete không giới hạn địa lý, thử việc vượt 60 ngày), kèm giải thích ngắn "điều này có nghĩa là gì với bạn trong thực tế" — test giả định: _người dùng cần biết điều khoản nào cụ thể là vấn đề và tại sao, không chỉ cảm giác "có gì đó lạ"_
 
 **Out-of-Scope:**
 
-- **Gợi ý câu hỏi / yêu cầu sửa đổi để gửi HR** — *[chuyển từ In-Scope sang đây sau AI critique]* người dùng có thể tự soạn câu hỏi khi đã hiểu điều khoản; đây là polish không phải core MVP
+- **Gợi ý câu hỏi / yêu cầu sửa đổi để gửi HR** — _[chuyển từ In-Scope sang đây sau AI critique]_ người dùng có thể tự soạn câu hỏi khi đã hiểu điều khoản; đây là polish không phải core MVP
 - **Chat hỏi đáp tự do sau khi review** — tốn context window, làm phức tạp UX; người dùng cần kết quả nhanh hơn là chat dài
 - **So sánh hợp đồng với template chuẩn ngành** — cần data template lớn, không cần thiết để test willingness to pay
 - **Lưu lịch sử review để so sánh nhiều offer** — tính năng retention tốt nhưng không cần cho lần dùng đầu tiên
@@ -54,47 +55,52 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
 
 > Developer, designer, hoặc data analyst tại Việt Nam, 22–30 tuổi, vừa nhận offer từ công ty nước ngoài hoặc startup có vốn ngoại lần đầu hoặc lần thứ hai. Đủ kỹ năng chuyên môn để làm việc trong môi trường quốc tế, nhưng chưa từng xử lý hợp đồng lao động có điều khoản pháp lý phức tạp và không có luật sư trong mạng lưới cá nhân. Deadline ký thường là 2–5 ngày kể từ khi nhận offer.
 
-*(Nối trực tiếp từ Customer Segment Card — Day 16 Version B)*
+_(Nối trực tiếp từ Customer Segment Card — Day 16 Version B)_
 
 ### User Stories
 
 **Story 1:**
+
 > As a fresher developer vừa nhận offer từ một startup Singapore có văn phòng tại TP.HCM, I want upload file hợp đồng và nhận về danh sách điều khoản rủi ro được giải thích bằng tiếng Việt trong vòng 5 phút, so that tôi biết chính xác điều khoản nào cần hỏi lại HR trước khi ký — thay vì ký trong trạng thái không chắc chắn và hối hận sau này.
 
 **Story 2:**
+
 > As a mid-level designer đang cân nhắc offer từ một agency Nhật Bản, I want xem AI giải thích điều khoản IP assignment trong hợp đồng của tôi — cụ thể là nó ảnh hưởng thế nào đến side project cá nhân tôi đang làm — so that tôi quyết định được liệu cần yêu cầu carve-out trước khi ký hay không, trong 48 giờ trước khi deadline offer hết hạn.
 
 ### AI-Specific
 
 **Model Selection:**
+
 - **Model:** Claude claude-sonnet-4-6 (primary); fallback sang GPT-4o nếu benchmark cho thấy cost/accuracy tốt hơn cho use-case cụ thể này
 - **Lý do chọn:** Hợp đồng lao động từ công ty nước ngoài thường là PDF 10–30 trang, song ngữ Anh-Việt, với cấu trúc pháp lý phức tạp. Cần model có context window lớn (≥100k tokens) và khả năng hiểu văn bản pháp lý tốt. Claude Sonnet đáp ứng cả hai ở mức latency và cost hợp lý hơn Opus cho tác vụ này.
 - **Trade-offs chấp nhận:** Latency 10–20 giây cho file dài — chấp nhận được vì đây là tác vụ async (người dùng không cần real-time); có thể hiển thị progress indicator và stream kết quả theo từng điều khoản
 - **Trade-offs không chấp nhận:** Hallucination về điều khoản pháp lý cụ thể (bịa ra điều luật không tồn tại, hoặc giải thích sai nghĩa một điều khoản theo hướng có hại cho người dùng) — đây là rủi ro cao nhất và là lý do chính cần Fallback UX nghiêm túc
 
 **Data Requirements:**
+
 - **Nguồn dữ liệu:**
-  - (1) *Knowledge base pháp lý:* Bộ Luật Lao Động 2019 + Nghị định 145/2020/NĐ-CP hướng dẫn + các nghị định liên quan — text tĩnh, được cấu trúc hóa thành vector database để RAG; không cần fine-tune
-  - (2) *Pattern library:* ~100 điều khoản mẫu phổ biến trong HĐ công ty nước ngoài tại Việt Nam (IP assignment, non-compete, ESOP, probation) — do team curate thủ công từ các mẫu HĐ thu thập được (với sự đồng ý); dùng để guide AI nhận diện pattern
-  - (3) *File HĐ người dùng upload:* Xử lý in-session, không lưu sau khi session kết thúc
+  - (1) _Knowledge base pháp lý:_ Bộ Luật Lao Động 2019 + Nghị định 145/2020/NĐ-CP hướng dẫn + các nghị định liên quan — text tĩnh, được cấu trúc hóa thành vector database để RAG; không cần fine-tune
+  - (2) _Pattern library:_ ~100 điều khoản mẫu phổ biến trong HĐ công ty nước ngoài tại Việt Nam (IP assignment, non-compete, ESOP, probation) — do team curate thủ công từ các mẫu HĐ thu thập được (với sự đồng ý); dùng để guide AI nhận diện pattern
+  - (3) _File HĐ người dùng upload:_ Xử lý in-session, không lưu sau khi session kết thúc
 - **Owner:** Team sản phẩm owns knowledge base và pattern library; người dùng owns file HĐ của họ và có quyền xóa bất kỳ lúc nào
 - **Update frequency:** Knowledge base luật: update khi có văn bản pháp lý mới (thường 1–2 lần/năm); Pattern library: review hàng quý dựa trên điều khoản mới xuất hiện trong feedback người dùng
 - **Rủi ro data quality:** BLLĐ 2019 là văn bản chính thức, rủi ro thấp. Pattern library: rủi ro bias nếu sample HĐ không đủ đa dạng (thiếu HĐ từ các ngành hoặc quốc gia ít phổ biến hơn) → plan: ghi rõ coverage hiện tại và disclaimer khi điều khoản nằm ngoài pattern đã biết
 
 **Fallback UX:**
 
-*Chiến lược tổng: Human-in-the-loop làm primary + Expectation Management làm baseline constant*
+_Chiến lược tổng: Human-in-the-loop làm primary + Expectation Management làm baseline constant_
 
-| Trigger | Điều kiện đo được | Hành động hệ thống | User options |
-|---|---|---|---|
-| **File không đọc được** | PyMuPDF không extract được text (file scan, ảnh chụp, hoặc bị encrypt) | Hiển thị: "File này ở dạng ảnh — tôi không đọc được text tự động. Bạn có thể copy-paste nội dung điều khoản cần hỏi vào đây." + text input field | Copy-paste thủ công hoặc upload file khác |
-| **Điều khoản nằm ngoài knowledge base** | Điều khoản không match với bất kỳ pattern nào trong library VÀ không tìm được điều luật liên quan trong knowledge base sau 2 lượt retrieval | Hiển thị kết quả phân tích sơ bộ + banner vàng: "Điều khoản này hiếm gặp trong dữ liệu của chúng tôi. Đây là giải thích sơ bộ — nên tham khảo thêm ý kiến từ người có kinh nghiệm pháp lý trước khi dùng làm căn cứ negotiate." | Chấp nhận kết quả sơ bộ hoặc bấm "Report — điều này sai" |
-| **Nội dung liên quan đến tranh chấp đã xảy ra** | Prompt chứa keyword pattern: "đã ký", "đã xảy ra", "đang tranh chấp", "công ty đang vi phạm" | Hiển thị: "Bạn có vẻ đang hỏi về tình huống đã xảy ra sau khi ký — công cụ này chỉ hỗ trợ review trước khi ký. Nếu đang có tranh chấp lao động, bạn cần liên hệ luật sư hoặc Phòng LĐTBXH tại địa phương." | Thoát hoặc hỏi về HĐ mới khác |
+| Trigger                                         | Điều kiện đo được                                                                                                                           | Hành động hệ thống                                                                                                                                                                                                              | User options                                             |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **File không đọc được**                         | PyMuPDF không extract được text (file scan, ảnh chụp, hoặc bị encrypt)                                                                      | Hiển thị: "File này ở dạng ảnh — tôi không đọc được text tự động. Bạn có thể copy-paste nội dung điều khoản cần hỏi vào đây." + text input field                                                                                | Copy-paste thủ công hoặc upload file khác                |
+| **Điều khoản nằm ngoài knowledge base**         | Điều khoản không match với bất kỳ pattern nào trong library VÀ không tìm được điều luật liên quan trong knowledge base sau 2 lượt retrieval | Hiển thị kết quả phân tích sơ bộ + banner vàng: "Điều khoản này hiếm gặp trong dữ liệu của chúng tôi. Đây là giải thích sơ bộ — nên tham khảo thêm ý kiến từ người có kinh nghiệm pháp lý trước khi dùng làm căn cứ negotiate." | Chấp nhận kết quả sơ bộ hoặc bấm "Report — điều này sai" |
+| **Nội dung liên quan đến tranh chấp đã xảy ra** | Prompt chứa keyword pattern: "đã ký", "đã xảy ra", "đang tranh chấp", "công ty đang vi phạm"                                                | Hiển thị: "Bạn có vẻ đang hỏi về tình huống đã xảy ra sau khi ký — công cụ này chỉ hỗ trợ review trước khi ký. Nếu đang có tranh chấp lao động, bạn cần liên hệ luật sư hoặc Phòng LĐTBXH tại địa phương."                      | Thoát hoặc hỏi về HĐ mới khác                            |
 
-*Disclaimer cố định (Expectation Management — hiển thị ở đầu trang kết quả, không thể dismiss):*
-> ⚠️ *Đây là phân tích sơ bộ dựa trên BLLĐ 2019 và các pattern phổ biến — không phải tư vấn pháp lý chính thức và không có giá trị pháp lý. Với điều khoản quan trọng, hãy xác nhận thêm với luật sư trước khi ký.*
+_Disclaimer cố định (Expectation Management — hiển thị ở đầu trang kết quả, không thể dismiss):_
 
-*User override:* Người dùng có thể bấm "Điều này sai hoặc thiếu" trên bất kỳ điều khoản nào → report ghi vào queue review của team, không tự động thay đổi kết quả
+> ⚠️ _Đây là phân tích sơ bộ dựa trên BLLĐ 2019 và các pattern phổ biến — không phải tư vấn pháp lý chính thức và không có giá trị pháp lý. Với điều khoản quan trọng, hãy xác nhận thêm với luật sư trước khi ký._
+
+_User override:_ Người dùng có thể bấm "Điều này sai hoặc thiếu" trên bất kỳ điều khoản nào → report ghi vào queue review của team, không tự động thay đổi kết quả
 
 ### Success Metrics
 
@@ -138,11 +144,13 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
 ## 4. PMF Scorecard
 
 **Aha Moment:**
+
 > Khoảnh khắc người dùng đọc giải thích của AI về một điều khoản trong hợp đồng của họ và lần đầu tiên nói ra — hoặc hành động theo — "À, điều này có nghĩa là XYZ trong thực tế — tôi phải hỏi lại điều này."
 >
 > **Hành vi đo được phản ánh khoảnh khắc này:** Người dùng copy ít nhất một đoạn từ trang kết quả review (điều khoản được giải thích, hoặc gợi ý hành động) trong cùng session với lần review đầu tiên — trong vòng 10 phút kể từ khi kết quả hiển thị.
 
 **Actionable Metric:**
+
 > **Copy-to-action rate** = (Số session có ít nhất 1 lần click Copy hoặc highlight text) / (Tổng số session đọc đến cuối trang kết quả) × 100%
 >
 > Cách đo: Track click event trên nút "Copy" từng điều khoản + clipboard copy event trên toàn trang kết quả; chia cho số session "completed review" (định nghĩa: scroll đến ≥80% chiều dài trang kết quả)
@@ -150,6 +158,7 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
 > **Secondary — Return rate D30** = % người dùng đã dùng ít nhất 1 lần quay lại trong 30 ngày — đây là proxy gần nhất với "người dùng nhận được giá trị thực và muốn dùng lại hoặc giới thiệu cho người khác"
 
 **PMF Method:**
+
 > **Sean Ellis Test** — ngưỡng: >40% "Very disappointed"
 >
 > Kết hợp với **Aha Moment tracking** — ngưỡng: ≥40% người dùng active (dùng ít nhất 1 lần) đạt Copy-to-action trong session đầu tiên
@@ -157,6 +166,7 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
 > Thời điểm đo PMF lần đầu: Sau 6–8 tuần kể từ khi có ≥200 người dùng đã hoàn thành ít nhất 1 review
 
 **Vanity Metrics tôi sẽ không dùng:**
+
 - Số lượt download / số tài khoản đăng ký — không cho biết ai thực sự nhận được giá trị
 - Số lượt upload file — người dùng có thể upload rồi không đọc kết quả
 - Thời gian trung bình trên trang — tăng vì UX tệ cũng được tính là thành công
@@ -183,6 +193,7 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
    - **Action: Reject** — giữ 1 hypothesis nhưng làm rõ "Riskiest assumption" là vế thứ hai (người dùng tin và hành động theo), không phải vế đầu (người dùng hiểu). Tách thành 2 hypothesis sẽ làm scope quá rộng cho MVP.
 
 **Thay đổi lớn nhất giữa Version A và Version B:**
+
 > In-Scope từ 3 tính năng xuống còn 2, và Fallback UX từ mô tả chung chung sang table với trigger + điều kiện đo được + hành động cụ thể cho từng scenario. Đây là hai thay đổi có impact nhất đến khả năng engineer đọc và implement được PRD này mà không cần hỏi lại quá 3 câu.
 
 ---
@@ -190,6 +201,7 @@ Sau khi chạy PRD Stress-Test Prompt với AI, tôi nhận ra 3 điểm cần s
 ## 6. Self-assessment
 
 **Mắt xích nào vẫn yếu nhất sau Phiên bản B:**
+
 > **Data Requirements** — tôi đã xác định được nguồn (BLLĐ 2019 + Pattern library), nhưng chưa trả lời được: làm thế nào để collect ~100 HĐ mẫu từ công ty nước ngoài để build pattern library ban đầu mà không vi phạm privacy và confidentiality? Đây là blocker thực tế trước khi build — và chưa có plan cụ thể.
 
 **Open questions muốn giải đáp tiếp:**
